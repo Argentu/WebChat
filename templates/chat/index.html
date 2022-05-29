@@ -18,10 +18,9 @@
 {% block content %}
     <div class="input-group" id="select">
         <select class="form-select" id="room-name-input">
-            <option selected>Choose...</option>
-            <option value="One">One</option>
-            <option value="Two">Two</option>
-            <option value="Three">Three</option>
+            {% for i in chats %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
         </select>
         <button class="btn btn-outline-primary"
                 type="button" value="Enter"
