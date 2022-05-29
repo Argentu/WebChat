@@ -1,0 +1,37 @@
+{% extends 'chat/base.html' %}
+{% block title %}
+    User log in
+{% endblock %}
+{% block style %}
+    <style>
+    body{
+        background-color: azure;
+    }
+    form{
+        position: absolute;
+        top: 50%;
+        width: 30%;
+        left:50%;
+        transform: translate(-50%, -50%);
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+        <div class="form-group">
+            <label for="username_input">Username</label>
+            <input class="form-control" id="username_input"
+                   placeholder="Enter username..." name="usrnm"
+            {% if exist %} value="{{ name }}" {% endif %}>
+            {% if exist %}
+                <br>
+                <label for="password_input">Password</label>
+                <input class="form-control" id="password_input" type="password"
+                       placeholder="Enter password..." name="passwd">
+            {% endif %}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Log in</button>
+    </form>
+{% endblock %}

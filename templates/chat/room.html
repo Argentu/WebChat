@@ -1,0 +1,102 @@
+{% extends 'chat/base.html' %}
+{% block  meta %}<meta charset="utf-8"/>{% endblock %}
+{% block title %}ChatRoom: {{ room_name }}{% endblock %}
+{% block style %}
+    <style>
+    body{
+        background-color: azure;
+    }
+    #chat-log{
+        display: block;
+        position: absolute;
+        border: 5px solid #7ddede;
+        border-radius: 15px;
+        width: 50%;
+        height: 75%;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        background-color: #d5ffff;
+        padding: 10px;
+        overflow-y:scroll;
+    }
+    .m-4 {
+        position: absolute;
+        width: 50%;
+        top: 85%;
+        left: 49%;
+        transform: translate(-50%, -50%);
+    }
+    #usr_label{
+        display: block;
+        text-align: center;
+        width: 15%;
+        padding: 10px;
+        margin: 2%;
+        border: 5px solid blue;
+        border-radius: 15px;
+        background-color: #ffffff;
+    }
+    #name{
+        color: {{ usr_color }};
+        font-weight: bold;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="usr_label">
+        <h4 id="name">{{ username }}</h4>
+        <hr>
+        <h4>{{ room_name }}</h4>
+        <hr>
+        <a href="../"><-- Back</a>
+    </div>
+    <div id="chat-log"></div>
+    <div class="m-4">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control"
+                   placeholder="Write a message..."
+                   id="chat-message-input">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary"
+                        type="button" id="chat-message-submit">Send</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        const chatSocket = new WebSocket(
+            'ws://'+window.location.host+'/ws/room/'+'{{ room_name }}'+'/'
+        );
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if (data.message) {
+                const block = document.getElementById('chat-log');
+                const mess =
+                    '<p align="justify">'
+                    +'<span style="color:{{ usr_color }}; font-weight: bold;">{{ username }}:</span><br>'
+                    +data.message
+                    +'</p>';
+                block.innerHTML += mess;
+            } else {alert('Message can\'t be empty')}
+        };
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed');
+        };
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  //Enter
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'chat/base.html' %}
+{% block title %}
+    User sign up
+{% endblock %}
+{% block style %}
+    <style>
+    body{
+        background-color: azure;
+    }
+    form{
+        position: absolute;
+        top: 40%;
+        width: 30%;
+        left:50%;
+        transform: translate(-25%, -25%);
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Sign up</button>
+    </form>
+{% endblock %}

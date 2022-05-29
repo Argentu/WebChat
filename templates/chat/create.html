@@ -1,0 +1,38 @@
+{% extends 'chat/base.html' %}
+{% block  meta %}<meta charset="utf-8"/>{% endblock %}
+{% block title %}Create chatroom{% endblock %}
+{% block style %}
+    <style>
+    body{
+        background-color: azure;
+    }
+    form {
+        position: absolute;
+        width: 50%;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <div class="form-group">
+            <label for="roomname_input">Name of chatroom</label>
+            <input class="form-control" id="roomname_input"
+                   placeholder="Enter chatroom name..." name="chtnm">
+            <br>
+            <label for="link_input">Invite link</label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">{{ url }}</span>
+                </div>
+                <input type="text" class="form-control" id="link_input"
+                placeholder="Leave blank for autogen">
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+{% endblock %}
